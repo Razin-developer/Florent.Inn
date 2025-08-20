@@ -2,7 +2,7 @@
 
 @layer base {
   :root {
-    color-scheme: dark;
+    color-scheme: light;
     --accent: #00ffff;
   }
   html {
@@ -14,8 +14,8 @@
     height: 100%;
   }
   body {
-    background: #000;
-    color: #fff;
+    background: #f9f9f7; /* off-white futuristic */
+    color: #111; /* near-black text */
     font-family: Inter, system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -67,10 +67,12 @@
     }
   }
   .card-surface {
-    background: rgba(255, 255, 255, 0.05);
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05) inset,
+      0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0.75rem;
+    backdrop-filter: blur(6px);
   }
   .font-rajdhani {
     font-family: 'Rajdhani', Inter, system-ui, sans-serif;
@@ -83,7 +85,7 @@
   }
 }
 
-/* Futuristic animation utilities */
+/* Futuristic animations */
 @keyframes marquee {
   0% {
     transform: translateX(0);
@@ -92,7 +94,6 @@
     transform: translateX(-50%);
   }
 }
-
 @keyframes float {
   0%,
   100% {
@@ -102,7 +103,6 @@
     transform: translateY(-6px);
   }
 }
-
 @keyframes pulse-glow {
   0%,
   100% {
@@ -114,7 +114,6 @@
       0 0 36px rgba(0, 255, 255, 0.25);
   }
 }
-
 @keyframes sheen {
   0% {
     transform: translateX(-120%);
@@ -124,9 +123,10 @@
   }
 }
 
+/* Futuristic UI elements */
 .neon-border {
-  box-shadow: 0 0 0 1px rgba(0, 255, 255, 0.35),
-    0 0 24px rgba(0, 255, 255, 0.12) inset;
+  box-shadow: 0 0 0 1px rgba(0, 255, 255, 0.4),
+    0 0 18px rgba(0, 255, 255, 0.15) inset;
 }
 .glow {
   animation: pulse-glow 3s ease-in-out infinite;
@@ -157,49 +157,81 @@
 }
 .marquee::before {
   left: 0;
-  background: linear-gradient(90deg, #000 0%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(90deg, #f9f9f7 0%, rgba(249, 249, 247, 0) 100%);
 }
 .marquee::after {
   right: 0;
-  background: linear-gradient(270deg, #000 0%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(270deg, #f9f9f7 0%, rgba(249, 249, 247, 0) 100%);
 }
 
 .grid-bg {
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(
-      rgba(0, 255, 255, 0.08) 1px,
-      transparent 1px
-    ),
+  background-image: linear-gradient(rgba(0, 255, 255, 0.4) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 255, 255, 0.08) 1px, transparent 1px);
   background-size: 60px 60px, 60px 60px;
-  background-position: 0 0, 0 0;
   mask-image: radial-gradient(
     circle at 50% 30%,
-    rgba(0, 0, 0, 0.9),
+    rgba(255, 255, 255, 0.9),
     transparent 70%
   );
   pointer-events: none;
 }
 
+/* Shine overlay — sits on top of the whole section */
 .shine-wrap {
-  position: relative;
+  position: absolute;
+  inset: 0; /* cover entire hero */
+  z-index: 60; /* above all hero children */
   overflow: hidden;
+  pointer-events: none; /* don't block clicks */
 }
+
 .shine-wrap::after {
   content: '';
   position: absolute;
-  inset: 0;
+  inset: -20% -20%; /* overscan so the band fully covers diagonals */
   background: linear-gradient(
-    120deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.15) 50%,
-    transparent 100%
+    115deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0.75) 50%,
+    rgba(255, 255, 255, 0) 60%,
+    rgba(255, 255, 255, 0) 100%
   );
-  transform: translateX(-120%);
+  transform: translateX(-140%);
+  will-change: transform, opacity;
+  mix-blend-mode: screen; /* stronger highlight on off-white */
+  animation: sheen-sweep 3s linear infinite; /* 1 swift pass + idle */
 }
-.shine-wrap:hover::after {
-  animation: sheen 900ms ease;
+
+/* One fast sweep (0–15%), then invisible (idle) until the next cycle */
+@keyframes sheen-sweep {
+  0% {
+    transform: translateX(-140%);
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  15% {
+    transform: translateX(140%);
+    opacity: 1;
+  }
+  16% {
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(140%);
+    opacity: 0;
+  }
+}
+
+/* Optional: respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .shine-wrap::after {
+    animation: none;
+  }
 }
 
 .spotlight {
@@ -209,7 +241,7 @@
   z-index: 60;
   background: radial-gradient(
     600px 600px at var(--mx, 50%) var(--my, 20%),
-    rgba(0, 255, 255, 0.08),
+    rgba(0, 255, 255, 0.25),
     transparent 60%
   );
 }
@@ -220,7 +252,7 @@
 }
 .hover-raise:hover {
   transform: translateY(-6px) rotate3d(1, 1, 0, 2deg);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
 }
 
 /* Buttons */
@@ -231,8 +263,9 @@
   height: 3rem;
   padding: 0 2rem;
   border-radius: 9999px;
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #111;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #ffffff;
   position: relative;
   overflow: hidden;
   transition: background-position 600ms ease, box-shadow 300ms ease,
@@ -242,22 +275,22 @@
   border-color: rgba(0, 255, 255, 0.5);
   background-image: linear-gradient(
     90deg,
-    rgba(0, 255, 255, 0.06) 0%,
-    rgba(0, 255, 255, 0.18) 50%,
-    rgba(0, 255, 255, 0.06) 100%
+    rgba(0, 255, 255, 0.08) 0%,
+    rgba(0, 255, 255, 0.16) 50%,
+    rgba(0, 255, 255, 0.08) 100%
   );
   background-size: 200% 100%;
 }
 .btn-gradient:hover {
   background-position: 100% 0;
-  box-shadow: 0 10px 30px rgba(0, 255, 255, 0.15);
+  box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
 }
 .btn-outline {
   background: transparent;
 }
 .btn-outline:hover {
   border-color: rgba(0, 255, 255, 0.5);
-  box-shadow: 0 8px 24px rgba(0, 255, 255, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 255, 255, 0.12);
 }
 
 /* Interactive cards */
@@ -266,33 +299,20 @@
     transform 300ms ease;
 }
 .card-interactive:hover {
-  border-color: rgba(0, 255, 255, 0.35);
+  border-color: rgba(0, 255, 255, 0.4);
   box-shadow: 0 0 0 1px rgba(0, 255, 255, 0.25) inset,
-    0 24px 60px rgba(0, 255, 255, 0.08);
+    0 24px 60px rgba(0, 255, 255, 0.12);
 }
 
-/* Animated underline with moving tile (simple) */
-@keyframes tile-run {
-  0% {
-    left: 0;
-  }
-  50% {
-    left: calc(100% - 12px);
-  }
-  100% {
-    left: 0;
-  }
-}
-
+/* Animated underline */
 .underline-anim {
   position: relative;
   height: 1px;
   background: linear-gradient(
     90deg,
-    rgba(0, 255, 255, 0.8),
+    rgba(0, 255, 255, 0.9),
     rgba(0, 255, 255, 0)
   );
-  overflow: visible;
 }
 .underline-anim::after {
   content: '';
@@ -303,6 +323,5 @@
   height: 7px;
   border-radius: 2px;
   background: #00ffff;
-  box-shadow: 0 0 14px rgba(0, 255, 255, 0.7);
-  will-change: left;
+  box-shadow: 0 0 14px rgba(0, 255, 255, 0.6);
 }
