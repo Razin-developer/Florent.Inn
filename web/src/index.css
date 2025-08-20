@@ -182,7 +182,7 @@
 .shine-wrap {
   position: absolute;
   inset: 0; /* cover entire hero */
-  z-index: 60; /* above all hero children */
+  z-index: 49; /* above all hero children */
   overflow: hidden;
   pointer-events: none; /* don't block clicks */
 }
@@ -211,14 +211,14 @@
     transform: translateX(-140%);
     opacity: 0;
   }
-  5% {
+  40% {
     opacity: 1;
   }
-  15% {
+  51% {
     transform: translateX(140%);
     opacity: 1;
   }
-  16% {
+  51% {
     opacity: 0;
   }
   100% {
