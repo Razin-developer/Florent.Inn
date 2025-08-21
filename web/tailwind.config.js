@@ -16,6 +16,7 @@ export default {
 				inter: ['Inter', 'system-ui', 'sans-serif'],
 				orbitron: ['Orbitron', 'Inter', 'system-ui', 'sans-serif'],
 				rajdhani: ['Rajdhani', 'Inter', 'system-ui', 'sans-serif'],
+				roboto: ['Roboto', 'Inter', 'system-ui', 'sans-serif'],
 			},
 			backgroundImage: {
 				'grid-fade': 'linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)',
